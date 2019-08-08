@@ -5,3 +5,21 @@ body {
 	margin: 0px;
 	padding: 0px;
 }
+
+.series{
+	&__list{
+		list-style: none;
+		padding-inline-start: 5px;
+	}
+	&__item{
+		background-color: $colorLight;
+	}
+	&__image{
+		width: 300px;
+		height: 300px;
+		background-size: cover;
+	}
+	&__show{
+		color: $colorDark;
+	}
+}
