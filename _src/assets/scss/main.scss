@@ -5,7 +5,8 @@ body {
 	margin: 0px;
 	padding: 0px;
 }
-.favorite{
+
+.favorite {
 	&__item{
 		background-color: $colorDark;
 	}
@@ -13,6 +14,7 @@ body {
 	color: $colorLight;
 	}
 }
+
 .series{
 	&__list{
 		list-style: none;
