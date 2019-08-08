@@ -3,15 +3,18 @@
 const input = document.querySelector('.js-input');
 const btnSearch = document.querySelector('.js-search');
 const seriesList = document.querySelector('.js-list');
+const favoritesList = document.querySelector('.js-favorite-list');
+
 
 
 let searchResult = [];
 let favorites = [];
 
 const getInputValue = () => input.value;
-const clearListResult = () => seriesList.innerHTML = "";
+const clearListResult = (seriesList) => seriesList.innerHTML = "";
 
 const arrConstructor = (data) => {
+    clearListResult(seriesList);
     searchResult = [];
     for (let i=0; i<data.length; i++){
         if (data[i].show.image){
@@ -35,7 +38,6 @@ return searchResult;
 const showData = (data) => {
     for (let i=0; i < data.length; i++){
     const newItem = document.createElement('li');
-    newItem.dataset.index = 123;
     let newImage = document.createElement('img');
     let newShow = document.createElement('h2');
     newItem.appendChild(newImage);
@@ -44,14 +46,15 @@ const showData = (data) => {
     let newShowName = document.createTextNode(`${data[i].name}`);
     newShow.appendChild(newShowName);
     newImage.style = `background-image: url(${data[i].image}`;
+    newItem.dataset.adaPos = [i];
     newItem.classList.add('series__item', 'js-item');
     newImage.classList.add('series__image');
     newShow.classList.add('series__show');
+
     }
 }
 
 const addListeners = ()=> {
-    debugger;
     const seriesItem = document.querySelectorAll('.js-item');
     for (let item of seriesItem){
         item.addEventListener("click", handlerFavorites);
@@ -59,31 +62,41 @@ const addListeners = ()=> {
 } 
 // Favorites
 const saveFavorite = (ev) =>{
-    ev.stopPropagation;
-    let selectedFavorite = ev.currentTarget;
-    favorites.push(searchResult[2]);
-    favorites.push({
-        name: selectedFavorite.name,
-        image: selectedFavorite.image,
-        id: selectedFavorite.id
-    });
+    ev.preventDefault();
+    const selectedFavorite = ev.currentTarget;
+    const foundFavorite =parseInt(selectedFavorite.getAttribute("data-ada-pos"));
+    favorites.push(searchResult[foundFavorite]);
     return favorites;
 }
-/* const setFavorite = (favorites) =>{
-    for (let i=0; i<favorites.length;i++){
-        favorites[i].classList.remove('series__item');
-        favorites[i].classList.add('favorite__item');
-        const applyFavoriteClass = favorites[i].children;
-        applyFavoriteClass[1].classList.remove('series__show');
-        applyFavoriteClass[1].classList.add('favorite__txt');
+
+const showDataFavorites = (favoritesData) => {
+    clearListResult(favoritesList);
+    for (let i=0; i < favoritesData.length; i++){
+    const newItem = document.createElement('li');
+    let newImage = document.createElement('img');
+    let newShow = document.createElement('h2');
+    newItem.appendChild(newImage);
+    newItem.appendChild(newShow);
+    favoritesList.appendChild(newItem);
+    let newShowName = document.createTextNode(`${favoritesData[i].name}`);
+    newShow.appendChild(newShowName);
+    newImage.style = `background-image: url(${favoritesData[i].image}`;
+    newItem.classList.add('series__item--favorite', 'js-item-favorite');
+    newImage.classList.add('series__image--favorite');
+    newShow.classList.add('series__show--favorite');
+
     }
 }
+// Check if id is in the list
+// Necesito guardar favorites en local storage y despues
+// comprobar si la ID esta en la búsqueda (searchResult),
+// y aplicar las clases para visualizarlo
+
 const saveLocalStorage = (favorites) =>{
     debugger;
-    const jsonfavorite = JSON.stringify(favorites);
     localStorage.removeItem ('favorite');
-    localStorage.setItem('favorite',jsonfavorite);
-} */
+    localStorage.setItem('favorite',JSON.stringify(favorites));
+}
 
 // Handler
 const getDatafromServer = (ev) =>{
@@ -104,7 +117,8 @@ btnSearch.addEventListener('click', getDatafromServer);
 //Handler favorites
 const handlerFavorites =(event) =>{
     saveFavorite(event);
-   /*  setFavorite(favorites);
-    saveLocalStorage(favorites); */
+    showDataFavorites(favorites);
+    debugger;
+    saveLocalStorage(favorites);
 
 }
