@@ -9,7 +9,6 @@ let searchResult = [];
 const getInputValue = () => input.value;
 
 const arrConstructor = (data) => {
-    debugger;
     for (let i=0; i<data.length; i++){
         if (data[i].show.image){
         searchResult.push({
@@ -28,7 +27,6 @@ return searchResult;
 }
 
 const showData = (data) => {
-    debugger;
     for (let i=0; i < data.length; i++){
     const newItem = document.createElement('li');
     let newImage = document.createElement('img');
@@ -39,11 +37,30 @@ const showData = (data) => {
     let newShowName = document.createTextNode(`${data[i].name}`);
     newShow.appendChild(newShowName);
     newImage.style = `background-image: url(${data[i].image}`;
+    newItem.classList.add('series__item', 'js-item');
     newImage.classList.add('series__image');
-    newItem.classList.add('series__item');
     newShow.classList.add('series__show');
     }
 }
+const addListeners = ()=>{
+    debugger;
+    const seriesItem = document.querySelectorAll('.js-item');
+    for (let item of seriesItem){
+        item.addEventListener('click',setFavorite);
+    }
+} 
+
+const setFavorite = (ev) =>{
+    debugger;
+    ev.stopPropagation;
+    let selectedItem = ev.target;
+    selectedItem.classList.remove('series__item');
+    selectedItem.classList.add('favorite__item');
+    const applyFavoriteClass = selectedItem.children;
+    applyFavoriteClass[1].classList.remove('series__show');
+    applyFavoriteClass[1].classList.add('favorite__txt');
+}
+
 // Handler
 const getDatafromServer = (ev) =>{
     ev.preventDefault();
@@ -53,8 +70,14 @@ const getDatafromServer = (ev) =>{
     .then (data => {
         data = arrConstructor(data);
         showData(data);
+        addListeners();
     });
 }
 
 
 btnSearch.addEventListener('click', getDatafromServer);
+
+//Handler favorites
+const handlerFavorites (event) =>{
+    setFavorite(event);
+}
