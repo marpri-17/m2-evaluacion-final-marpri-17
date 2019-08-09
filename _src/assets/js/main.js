@@ -31,18 +31,7 @@ const isFavorite = (item) =>{
     }
     return false;
 }
-/* const addFavoriteView =(seriesItem) =>{
-    debugger;
-    for (let i=0;i<seriesItem.length;i++){
-        seriesItemId = seriesItem[i].id;
-        for (let j=0;j<favorites.length;i++){
-        if (seriesItem[i].id === item.id){
-        item.classList.add('favorite__item');
-        item[1].classList.add('favorite__show');
-        }    
-    }
-    }   
-} */
+
 const arrConstructor = (data) => {
     clearListResult(seriesList);
     searchResult = [];
@@ -66,7 +55,6 @@ return searchResult;
 }
 
 const showData = (data) => {
-    debugger;
     for (let i=0; i < data.length; i++){
         const newItem = document.createElement('li');
         let newImage = document.createElement('img');
@@ -82,45 +70,38 @@ const showData = (data) => {
         newImage.classList.add('series__image');
         newShow.classList.add('series__show');
     }
-    //addFavoriteView(searchResult);
 }
 
 const addListeners = (list,handler)=> {
     const seriesItem = document.querySelectorAll(list);
-    for (let item of seriesItem){
-        item.addEventListener("click", handler);
-    }
+        for (let item of seriesItem){
+            item.addEventListener("click", handler);
+        }
 } 
 // Favorites
 
 
 const showDataFavorites = (favoritesData) => {
     for (let i=0; i < favoritesData.length; i++){
-    const newItem = document.createElement('li');
-    let newImage = document.createElement('img');
-    let newShow = document.createElement('h2');
-    newItem.appendChild(newImage);
-    newItem.appendChild(newShow);
-    favoritesList.appendChild(newItem);
-    let newShowName = document.createTextNode(`${favoritesData[i].name}`);
-    newShow.appendChild(newShowName);
-    newImage.style = `background-image: url(${favoritesData[i].image}`;
-    newItem.classList.add('series__item--favorite', 'js-item-favorite');
-    newImage.classList.add('series__image--favorite');
-    newShow.classList.add('series__show--favorite');
-    newItem.dataset.adaPos = [i];
+        const newItem = document.createElement('li');
+        let newImage = document.createElement('img');
+        let newShow = document.createElement('h2');
+        newItem.appendChild(newImage);
+        newItem.appendChild(newShow);
+        favoritesList.appendChild(newItem);
+        let newShowName = document.createTextNode(`${favoritesData[i].name}`);
+        newShow.appendChild(newShowName);
+        newImage.style = `background-image: url(${favoritesData[i].image}`;
+        newItem.classList.add('series__item--favorite', 'js-item-favorite');
+        newImage.classList.add('series__image--favorite');
+        newShow.classList.add('series__show--favorite');
+        newItem.dataset.adaPos = [i];
     }
 }
 
 const addFavorites = (element)=> {
     favorites.push (element);
 }
-
-
-// Check if id is in the list
-// Necesito guardar favorites en local storage y despues
-// comprobar si la ID esta en la búsqueda (searchResult),
-// y aplicar las clases para visualizarlo
 
 const saveLocalStorage = () =>{
     //localStorage.removeItem ('favorite');
@@ -151,11 +132,8 @@ for (let i=0;i<favorites.length;i++)
        return favorites
     }
 }
-/* const deleteLocalStorage = () =>{
-    favorites;
-} */
+
 const deleteFavorite = (ev) =>{
-    debugger;
     const deletedItem = pickedItem(ev, JSON.parse(localStorage.getItem('favorite')));
     deleteItem(deletedItem);
     saveLocalStorage();
