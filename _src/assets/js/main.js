@@ -63,6 +63,9 @@ const addListeners = ()=> {
 // Favorites
 const saveFavorite = (ev) =>{
     ev.preventDefault();
+    const savedFavorite = localStorage.getItem('favorite')
+    let json = JSON.parse(savedFavorite);
+    favorites = json;
     const selectedFavorite = ev.currentTarget;
     const foundFavorite =parseInt(selectedFavorite.getAttribute("data-ada-pos"));
     favorites.push(searchResult[foundFavorite]);
@@ -70,7 +73,6 @@ const saveFavorite = (ev) =>{
 }
 
 const showDataFavorites = (favoritesData) => {
-    clearListResult(favoritesList);
     for (let i=0; i < favoritesData.length; i++){
     const newItem = document.createElement('li');
     let newImage = document.createElement('img');
@@ -116,9 +118,22 @@ btnSearch.addEventListener('click', getDatafromServer);
 
 //Handler favorites
 const handlerFavorites =(event) =>{
+    debugger;
     saveFavorite(event);
-    showDataFavorites(favorites);
     debugger;
     saveLocalStorage(favorites);
-
+    clearListResult(favoritesList);
+    showDataFavorites(favorites);
 }
+function getLocalStorage () {
+    const savedFavorite = localStorage.getItem('favorite')
+    let json = JSON.parse(savedFavorite);
+    return json;
+}
+function starApp () {
+    const savedFavorite = localStorage.getItem('favorite')
+    let json = JSON.parse(savedFavorite);
+    showDataFavorites(json);
+}
+
+starApp();

@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<meta charset="UTF-8">
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/7ae56157c5.js"></script>
 	<title>Buscador de series</title>
   <link rel="icon" href="favicon.png"/>
 	<link rel="stylesheet" href="./assets/css/main.css">
 </head>
-<body>
-<h1 class="page__title">Buscador de series</h1>
-<form>
-<label for="input">Busca aquí tu serie favorita (en inglés)
-  <input type="text" name="input" class="js-input series__input">
-</label>
-<button type="submit" class="js-search serie__btn">Search</button>
-<ul class="series__list js-list"></ul>
-</form>
-<section>
-  <ul class="js-favorite-list"></ul>
+<body class="page__wrapper">
+<header class="page__header">
+  <h1 class="page__title">Buscador de series</h1>
+</header>
+<main class="series__wrapper">
+  <form class="series__form">
+    <label for="input">
+      <input type="text" name="input" class="js-input series__input" placeholder="Nombre de la serie">
+    </label>
+    <button type="submit" class="js-search series__btn"><i class="fas fa-search"></i></button>
+  </form>
+<section class="series__section">
+  <ul class="js-favorite-list series__list__favorite"></ul>
 </section>
+<ul class="series__list js-list"></ul>
+</main>
   <script src="./assets/js/main.js"></script>
 </body>
 </html>
