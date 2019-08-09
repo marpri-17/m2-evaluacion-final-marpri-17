@@ -20,6 +20,7 @@ body {
 //Para marcar favoritos
 .favorite {
 	&__item{
+		text-align: center;
 		background-color: $colorDest;
 	}
 	&__txt{
@@ -39,7 +40,6 @@ body {
 	}
 	&__list{
 		box-sizing: content-box;
-		//background-color: aquamarine;
 		list-style: none;
 		padding-inline-start: 5px;
 		&__favorite{
@@ -102,6 +102,3 @@ body {
 		transform: translate(10px, 10px);
 	}
 }
-/* .fa-search::before{
-	opacity: 1;
-} */

@@ -4,15 +4,36 @@ const input = document.querySelector('.js-input');
 const btnSearch = document.querySelector('.js-search');
 const seriesList = document.querySelector('.js-list');
 const favoritesList = document.querySelector('.js-favorite-list');
-
-
+const favoritesSection = document.querySelector('.series__section');
 
 let searchResult = [];
 let favorites = [];
 
 const getInputValue = () => input.value;
+
 const clearListResult = (seriesList) => seriesList.innerHTML = "";
 
+const pickedItem = (ev) =>{
+    ev.preventDefault();
+    let selectedShow = ev.currentTarget;
+    const foundFavoriteIndex =parseInt(selectedShow.getAttribute("data-ada-pos"));
+    const item = searchResult[foundFavoriteIndex];
+    return item;
+}
+
+const isFavorite = (item) =>{
+ const itemId = item.id;
+    for (let i=0; i<favorites.length; i++){
+        let id = favorites[i].id;
+        if (itemId ===id){
+            return true;
+        } 
+    }
+    return false;
+}
+const addFavoriteView =(seriesItem) =>{
+    
+}
 const arrConstructor = (data) => {
     clearListResult(seriesList);
     searchResult = [];
@@ -36,6 +57,7 @@ return searchResult;
 }
 
 const showData = (data) => {
+    debugger;
     for (let i=0; i < data.length; i++){
     const newItem = document.createElement('li');
     let newImage = document.createElement('img');
@@ -47,11 +69,15 @@ const showData = (data) => {
     newShow.appendChild(newShowName);
     newImage.style = `background-image: url(${data[i].image}`;
     newItem.dataset.adaPos = [i];
-    newItem.classList.add('series__item', 'js-item');
-    newImage.classList.add('series__image');
-    newShow.classList.add('series__show');
-
-    }
+    if (isFavorite(data[i])===true){
+        newItem.classList.add('favorite__item', 'js-item');
+        newImage.classList.add('series__image');
+        newShow.classList.add('favorite__txt');
+        } 
+        newItem.classList.add('series__item', 'js-item');
+        newImage.classList.add('series__image');
+        newShow.classList.add('series__show');
+        }
 }
 
 const addListeners = ()=> {
@@ -61,16 +87,7 @@ const addListeners = ()=> {
     }
 } 
 // Favorites
-const saveFavorite = (ev) =>{
-    ev.preventDefault();
-    const savedFavorite = localStorage.getItem('favorite')
-    let json = JSON.parse(savedFavorite);
-    favorites = json;
-    const selectedFavorite = ev.currentTarget;
-    const foundFavorite =parseInt(selectedFavorite.getAttribute("data-ada-pos"));
-    favorites.push(searchResult[foundFavorite]);
-    return favorites;
-}
+
 
 const showDataFavorites = (favoritesData) => {
     for (let i=0; i < favoritesData.length; i++){
@@ -86,17 +103,23 @@ const showDataFavorites = (favoritesData) => {
     newItem.classList.add('series__item--favorite', 'js-item-favorite');
     newImage.classList.add('series__image--favorite');
     newShow.classList.add('series__show--favorite');
-
-    }
 }
+}
+
+const addFavorites = (element)=> {
+    //let favorites = favorites.concat(JSON.parse(localStorage.getItem('favorite')));
+    favorites.push (element);
+    // return favorites;
+}
+
+
 // Check if id is in the list
 // Necesito guardar favorites en local storage y despues
 // comprobar si la ID esta en la búsqueda (searchResult),
 // y aplicar las clases para visualizarlo
 
-const saveLocalStorage = (favorites) =>{
-    debugger;
-    localStorage.removeItem ('favorite');
+const saveLocalStorage = () =>{
+    //localStorage.removeItem ('favorite');
     localStorage.setItem('favorite',JSON.stringify(favorites));
 }
 
@@ -118,22 +141,21 @@ btnSearch.addEventListener('click', getDatafromServer);
 
 //Handler favorites
 const handlerFavorites =(event) =>{
-    debugger;
-    saveFavorite(event);
-    debugger;
+    const seriesItem = pickedItem(event);
+    if (isFavorite(seriesItem)===false){
+        addFavorites(seriesItem)
+    }
     saveLocalStorage(favorites);
     clearListResult(favoritesList);
     showDataFavorites(favorites);
 }
-function getLocalStorage () {
-    const savedFavorite = localStorage.getItem('favorite')
-    let json = JSON.parse(savedFavorite);
-    return json;
-}
+
 function starApp () {
     const savedFavorite = localStorage.getItem('favorite')
-    let json = JSON.parse(savedFavorite);
-    showDataFavorites(json);
+    if (savedFavorite !== null) {
+        favorites = JSON.parse(savedFavorite);
+        showDataFavorites(favorites);
+    }
 }
 
 starApp();
