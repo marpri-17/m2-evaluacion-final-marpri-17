@@ -13,11 +13,11 @@ const getInputValue = () => input.value;
 
 const clearListResult = (seriesList) => seriesList.innerHTML = "";
 
-const pickedItem = (ev) =>{
+const pickedItem = (ev,arr) =>{
     ev.preventDefault();
     let selectedShow = ev.currentTarget;
     const foundFavoriteIndex =parseInt(selectedShow.getAttribute("data-ada-pos"));
-    const item = searchResult[foundFavoriteIndex];
+    const item = arr[foundFavoriteIndex];
     return item;
 }
 
@@ -31,9 +31,18 @@ const isFavorite = (item) =>{
     }
     return false;
 }
-const addFavoriteView =(seriesItem) =>{
-    
-}
+/* const addFavoriteView =(seriesItem) =>{
+    debugger;
+    for (let i=0;i<seriesItem.length;i++){
+        seriesItemId = seriesItem[i].id;
+        for (let j=0;j<favorites.length;i++){
+        if (seriesItem[i].id === item.id){
+        item.classList.add('favorite__item');
+        item[1].classList.add('favorite__show');
+        }    
+    }
+    }   
+} */
 const arrConstructor = (data) => {
     clearListResult(seriesList);
     searchResult = [];
@@ -59,31 +68,27 @@ return searchResult;
 const showData = (data) => {
     debugger;
     for (let i=0; i < data.length; i++){
-    const newItem = document.createElement('li');
-    let newImage = document.createElement('img');
-    let newShow = document.createElement('h2');
-    newItem.appendChild(newImage);
-    newItem.appendChild(newShow);
-    seriesList.appendChild(newItem);
-    let newShowName = document.createTextNode(`${data[i].name}`);
-    newShow.appendChild(newShowName);
-    newImage.style = `background-image: url(${data[i].image}`;
-    newItem.dataset.adaPos = [i];
-    if (isFavorite(data[i])===true){
-        newItem.classList.add('favorite__item', 'js-item');
-        newImage.classList.add('series__image');
-        newShow.classList.add('favorite__txt');
-        } 
+        const newItem = document.createElement('li');
+        let newImage = document.createElement('img');
+        let newShow = document.createElement('h2');
+        newItem.appendChild(newImage);
+        newItem.appendChild(newShow);
+        seriesList.appendChild(newItem);
+        let newShowName = document.createTextNode(`${data[i].name}`);
+        newShow.appendChild(newShowName);
+        newImage.style = `background-image: url(${data[i].image}`;
+        newItem.dataset.adaPos = [i];
         newItem.classList.add('series__item', 'js-item');
         newImage.classList.add('series__image');
         newShow.classList.add('series__show');
-        }
+    }
+    //addFavoriteView(searchResult);
 }
 
-const addListeners = ()=> {
-    const seriesItem = document.querySelectorAll('.js-item');
+const addListeners = (list,handler)=> {
+    const seriesItem = document.querySelectorAll(list);
     for (let item of seriesItem){
-        item.addEventListener("click", handlerFavorites);
+        item.addEventListener("click", handler);
     }
 } 
 // Favorites
@@ -103,13 +108,12 @@ const showDataFavorites = (favoritesData) => {
     newItem.classList.add('series__item--favorite', 'js-item-favorite');
     newImage.classList.add('series__image--favorite');
     newShow.classList.add('series__show--favorite');
-}
+    newItem.dataset.adaPos = [i];
+    }
 }
 
 const addFavorites = (element)=> {
-    //let favorites = favorites.concat(JSON.parse(localStorage.getItem('favorite')));
     favorites.push (element);
-    // return favorites;
 }
 
 
@@ -132,30 +136,53 @@ const getDatafromServer = (ev) =>{
     .then (data => {
         data = arrConstructor(data);
         showData(data);
-        addListeners();
+        addListeners(".js-item", handlerFavorites);
     });
 }
 
 
 btnSearch.addEventListener('click', getDatafromServer);
 
+// Delete favorite item
+const deleteItem =(item)=>{
+for (let i=0;i<favorites.length;i++)
+    if(item.id ===favorites[i].id){
+      favorites.splice(i,1);
+       return favorites
+    }
+}
+/* const deleteLocalStorage = () =>{
+    favorites;
+} */
+const deleteFavorite = (ev) =>{
+    debugger;
+    const deletedItem = pickedItem(ev, JSON.parse(localStorage.getItem('favorite')));
+    deleteItem(deletedItem);
+    saveLocalStorage();
+    clearListResult(favoritesList);
+    showDataFavorites(favorites);
+    addListeners('.js-item-favorite', deleteFavorite);
+}
 //Handler favorites
 const handlerFavorites =(event) =>{
-    const seriesItem = pickedItem(event);
+    const seriesItem = pickedItem(event,searchResult);
     if (isFavorite(seriesItem)===false){
         addFavorites(seriesItem)
     }
     saveLocalStorage(favorites);
     clearListResult(favoritesList);
     showDataFavorites(favorites);
+    debugger;
+    addListeners('.js-item-favorite', deleteFavorite);
 }
 
 function starApp () {
     const savedFavorite = localStorage.getItem('favorite')
-    if (savedFavorite !== null) {
-        favorites = JSON.parse(savedFavorite);
-        showDataFavorites(favorites);
-    }
+        if (savedFavorite !== null) {
+            favorites = JSON.parse(savedFavorite);
+            showDataFavorites(favorites);
+        }
+    addListeners('.js-item-favorite', deleteFavorite);
 }
 
 starApp();
