@@ -31,6 +31,7 @@ const isFavorite = (item, arr) => {
       return true;
     }
   }
+  return false;
 };
 
 const arrConstructor = data => {
@@ -83,13 +84,16 @@ const toggleView = item => {
 
 const pickedFavorite = arr => {
   let areFavorites = [];
-  let favorites = JSON.parse(localStorage.getItem("favorite"));
-  for (let i = 0; i < favorites.length; i++) {
-    let favoritesId = favorites[i].id;
-    for (let j = 0; j < arr.length; j++) {
-      let itemId = arr[j].id;
-      if (itemId === favoritesId) {
-        areFavorites.push(j);
+  let json = localStorage.getItem("favorite");
+  if (json !== null) {
+    let favorites = JSON.parse(json);
+    for (let i = 0; i < favorites.length; i++) {
+      let favoritesId = favorites[i].id;
+      for (let j = 0; j < arr.length; j++) {
+        let itemId = arr[j].id;
+        if (itemId === favoritesId) {
+          areFavorites.push(j);
+        }
       }
     }
   }
@@ -158,9 +162,8 @@ const getDatafromServer = ev => {
     .then(data => {
       data = arrConstructor(data);
       showData(data);
-      addListeners(".js-item", handlerFavorites);
-      debugger;
       paintView(pickedFavorite(data));
+      addListeners(".js-item", handlerFavorites);
     });
 };
 
@@ -178,15 +181,17 @@ const handlerFavorites = event => {
 };
 
 const deleteFavorite = ev => {
-  const deletedItem = pickedItem(
-    ev,
-    JSON.parse(localStorage.getItem("favorite"))
-  );
+const deletedItem = pickedItem(ev,JSON.parse(localStorage.getItem("favorite")));
   deleteItem(deletedItem);
   saveLocalStorage();
   clearListResult(favoritesList);
   showDataFavorites(favorites);
   addListeners(".js-item-favorite", deleteFavorite);
+  debugger;
+  clearListResult(seriesList);
+  showData(searchResult);
+  paintView(pickedFavorite(searchResult));
+  addListeners(".js-item", handlerFavorites);
 };
 
 function starApp() {
