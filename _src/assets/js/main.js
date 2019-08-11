@@ -31,10 +31,7 @@ const isFavorite = (item, arr) => {
       return true;
     }
   }
-  return false;
 };
-
-const PickedFavorite = () => {};
 
 const arrConstructor = data => {
   clearListResult(seriesList);
@@ -109,25 +106,6 @@ const paintView = arr => {
     }
   }
 };
-/*    for (let i =0; i<seriesList.length;i++){
-
-    }
-    let element = 
-    element = pickedItem(ev,sea)
-    const pickedItem = (ev, arr) => {
-        ev.preventDefault();
-        let selectedShow = ev.currentTarget;
-        const foundFavoriteIndex = parseInt(
-          selectedShow.getAttribute("data-ada-pos")
-        );
-        const item = arr[foundFavoriteIndex];
-        return item;
-      }; */
-/* if (isFavorite(newItem, searchResult) === true) {
-      newItem.classList.add("series__item--favorite", "js-item-favorite");
-      newImage.classList.add("series__iconst PickedFavorite = () => {};mage--favorite");
-      newShow.classList.add("series__show--favorite");
-} else { */
 
 const addListeners = (list, handler) => {
   const seriesItem = document.querySelectorAll(list);
@@ -166,10 +144,6 @@ const deleteItem = item => {
 const checkView = index => {
   seriesList[index];
 };
-// Check if id is in the list
-// Necesito guardar favorites en local storage y despues
-// comprobar si la ID esta en la búsqueda (searchResult),
-// y aplicar las clases para visualizarlo
 
 const saveLocalStorage = () => {
   localStorage.setItem("favorite", JSON.stringify(favorites));
@@ -201,7 +175,6 @@ const handlerFavorites = event => {
   clearListResult(favoritesList);
   showDataFavorites(favorites);
   addListeners(".js-item-favorite", deleteFavorite);
-  // PickedFavorite
 };
 
 const deleteFavorite = ev => {
