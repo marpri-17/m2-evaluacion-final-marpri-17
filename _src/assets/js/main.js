@@ -31,6 +31,7 @@ const isFavorite = (item, arr) => {
       return true;
     }
   }
+  return false;
 };
 
 const arrConstructor = data => {
@@ -83,13 +84,16 @@ const toggleView = item => {
 
 const pickedFavorite = arr => {
   let areFavorites = [];
-  let favorites = JSON.parse(localStorage.getItem("favorite"));
-  for (let i = 0; i < favorites.length; i++) {
-    let favoritesId = favorites[i].id;
-    for (let j = 0; j < arr.length; j++) {
-      let itemId = arr[j].id;
-      if (itemId === favoritesId) {
-        areFavorites.push(j);
+  let json = localStorage.getItem("favorite");
+  if (json !== null) {
+    let favorites = JSON.parse(json);
+    for (let i = 0; i < favorites.length; i++) {
+      let favoritesId = favorites[i].id;
+      for (let j = 0; j < arr.length; j++) {
+        let itemId = arr[j].id;
+        if (itemId === favoritesId) {
+          areFavorites.push(j);
+        }
       }
     }
   }
@@ -141,7 +145,6 @@ const deleteItem = item => {
       return favorites;
     }
 };
-
 const checkView = index => {
   seriesList[index];
 };
@@ -150,7 +153,7 @@ const saveLocalStorage = () => {
   localStorage.setItem("favorite", JSON.stringify(favorites));
 };
 
-// Handler
+// Handlers
 const getDatafromServer = ev => {
   ev.preventDefault();
   const url = "http://api.tvmaze.com/search/shows?q=";
@@ -159,25 +162,11 @@ const getDatafromServer = ev => {
     .then(data => {
       data = arrConstructor(data);
       showData(data);
-      addListeners(".js-item", handlerFavorites);
-      debugger;
       paintView(pickedFavorite(data));
+      addListeners(".js-item", handlerFavorites);
     });
 };
 
-const deleteFavorite = ev => {
-  const deletedItem = pickedItem(
-    ev,
-    JSON.parse(localStorage.getItem("favorite"))
-  );
-  deleteItem(deletedItem);
-  saveLocalStorage();
-  clearListResult(favoritesList);
-  showDataFavorites(favorites);
-  addListeners(".js-item-favorite", deleteFavorite);
-};
-
-//Handler favorites
 const handlerFavorites = event => {
   let element = event.currentTarget;
   toggleView(element);
@@ -191,14 +180,19 @@ const handlerFavorites = event => {
   addListeners(".js-item-favorite", deleteFavorite);
 };
 
-function starApp() {
-  const savedFavorite = localStorage.getItem("favorite");
-  if (savedFavorite !== null) {
-    favorites = JSON.parse(savedFavorite);
-    showDataFavorites(favorites);
-  }
+const deleteFavorite = ev => {
+const deletedItem = pickedItem(ev,JSON.parse(localStorage.getItem("favorite")));
+  deleteItem(deletedItem);
+  saveLocalStorage();
+  clearListResult(favoritesList);
+  showDataFavorites(favorites);
   addListeners(".js-item-favorite", deleteFavorite);
-}
+  debugger;
+  clearListResult(seriesList);
+  showData(searchResult);
+  paintView(pickedFavorite(searchResult));
+  addListeners(".js-item", handlerFavorites);
+};
 
 function starApp() {
   const savedFavorite = localStorage.getItem("favorite");
@@ -209,5 +203,4 @@ function starApp() {
   addListeners(".js-item-favorite", deleteFavorite);
 }
 starApp();
-
 btnSearch.addEventListener("click", getDatafromServer);
