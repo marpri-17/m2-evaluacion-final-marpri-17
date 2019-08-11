@@ -75,8 +75,7 @@ const showData = data => {
     newShow.classList.add("series__show");
   }
 };
-const toggleView = ev => {
-  let item = ev.currentTarget;
+const toggleView = item => {
   item.classList.remove("series__item");
   item.classList.add("favorite__item");
   let itemchildren = item.children;
@@ -85,11 +84,6 @@ const toggleView = ev => {
   textNode.classList.add("favorite__txt");
   console.log(itemchildren);
 };
-/* if (isFavorite(newItem, searchResult) === true) {
-      newItem.classList.add("series__item--favorite", "js-item-favorite");
-      newImage.classList.add("series__image--favorite");
-      newShow.classList.add("series__show--favorite");
-} else { */
 
 const addListeners = (list, handler) => {
   const seriesItem = document.querySelectorAll(list);
@@ -126,26 +120,12 @@ const deleteItem = item => {
     }
 };
 
-function starApp() {
-  const savedFavorite = localStorage.getItem("favorite");
-  if (savedFavorite !== null) {
-    favorites = JSON.parse(savedFavorite);
-    showDataFavorites(favorites);
-  }
-  addListeners(".js-item-favorite", deleteFavorite);
-}
-
-// Check if id is in the list
-// Necesito guardar favorites en local storage y despues
-// comprobar si la ID esta en la búsqueda (searchResult),
-// y aplicar las clases para visualizarlo
-
 const saveLocalStorage = () => {
   //localStorage.removeItem ('favorite');
   localStorage.setItem("favorite", JSON.stringify(favorites));
 };
 
-// Handlers
+// Handler
 const getDatafromServer = ev => {
   ev.preventDefault();
   const url = "http://api.tvmaze.com/search/shows?q=";
@@ -156,19 +136,6 @@ const getDatafromServer = ev => {
       showData(data);
       addListeners(".js-item", handlerFavorites);
     });
-};
-
-const handlerFavorites = event => {
-  toggleView(event);
-  const seriesItem = pickedItem(event, searchResult);
-  if (isFavorite(seriesItem, favorites) === false) {
-    addFavorites(seriesItem);
-  }
-  saveLocalStorage(favorites);
-  clearListResult(favoritesList);
-  showDataFavorites(favorites);
-  addListeners(".js-item-favorite", deleteFavorite);
-  // PickedFavorite
 };
 
 const deleteFavorite = ev => {
@@ -183,5 +150,29 @@ const deleteFavorite = ev => {
   addListeners(".js-item-favorite", deleteFavorite);
 };
 
+//Handler favorites
+const handlerFavorites = event => {
+  let item = event.currentTarget;
+  toggleView(item);
+  const seriesItem = pickedItem(event, searchResult);
+  if (isFavorite(seriesItem, favorites) === false) {
+    addFavorites(seriesItem);
+  }
+  saveLocalStorage(favorites);
+  clearListResult(favoritesList);
+  showDataFavorites(favorites);
+  addListeners(".js-item-favorite", deleteFavorite);
+};
+
+function starApp() {
+  const savedFavorite = localStorage.getItem("favorite");
+  if (savedFavorite !== null) {
+    favorites = JSON.parse(savedFavorite);
+    showDataFavorites(favorites);
+  }
+  addListeners(".js-item-favorite", deleteFavorite);
+}
+
 starApp();
+
 btnSearch.addEventListener("click", getDatafromServer);
