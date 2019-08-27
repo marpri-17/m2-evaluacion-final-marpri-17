@@ -41,6 +41,7 @@ const arrConstructor = (data) => {
             name: data[i].show.name,
             image: data[i].show.image.original,
             id: data[i].show.id,
+            genre: data[i].show.genres,
         })
     } else { 
         const insertShowName = (data[i].show.name).replace(" ","+");
@@ -48,6 +49,7 @@ const arrConstructor = (data) => {
             name: data[i].show.name,
             image: "https://via.placeholder.com/300?text="+insertShowName,
             id: data[i].show.id,
+            genre: data[i].show.genres,
         })
         }
     }
@@ -59,6 +61,15 @@ const showData = (data) => {
         const newItem = document.createElement('li');
         let newImage = document.createElement('img');
         let newShow = document.createElement('h2');
+        let newInfoList = document.createElement('ul');
+        newItem.appendChild(newInfoList);
+        debugger;
+        for (let genre of data[i].genre){
+            let newInfoItem = document.createElement('li');
+            let newInfoContent = document.createTextNode (genre);
+            newInfoItem.appendChild(newInfoContent);
+            newInfoList.appendChild(newInfoItem);
+        }   
         newItem.appendChild(newImage);
         newItem.appendChild(newShow);
         seriesList.appendChild(newItem);
@@ -99,9 +110,7 @@ const showDataFavorites = (favoritesData) => {
     }
 }
 
-const addFavorites = (element)=> {
-    favorites.push (element);
-}
+const addFavorites = (element)=> favorites.push (element);
 
 const saveLocalStorage = () =>{
     //localStorage.removeItem ('favorite');
@@ -125,21 +134,22 @@ const getDatafromServer = (ev) =>{
 btnSearch.addEventListener('click', getDatafromServer);
 
 // Delete favorite item
-const deleteItem =(item)=>{
+/* const deleteItem =(item)=>{
 for (let i=0;i<favorites.length;i++)
     if(item.id ===favorites[i].id){
       favorites.splice(i,1);
        return favorites
     }
-}
+} */
 
 const deleteFavorite = (ev) =>{
     const deletedItem = pickedItem(ev, JSON.parse(localStorage.getItem('favorite')));
-    deleteItem(deletedItem);
+    console.log (deletedItem.name);
+    /* deleteItem(deletedItem);
     saveLocalStorage();
     clearListResult(favoritesList);
     showDataFavorites(favorites);
-    addListeners('.js-item-favorite', deleteFavorite);
+    addListeners('.js-item-favorite', deleteFavorite); */
 }
 //Handler favorites
 const handlerFavorites =(event) =>{
