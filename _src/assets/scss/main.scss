@@ -8,7 +8,8 @@ body {
 }
 .page{
 	&__wrapper{
-		background-color: #F8EFBA;
+		background-color:$colorBackground;
+		color: $colorFont;
 	}
 	&__header{
 		display: flex;
@@ -17,16 +18,7 @@ body {
 	}
 
 }
-//Para marcar favoritos
-.favorite {
-	&__item{
-		text-align: center;
-		background-color: $colorDest;
-	}
-	&__txt{
-	color: $colorTextDest;
-	}
-}
+
 
 .series{
 	&__wrapper{
@@ -100,5 +92,12 @@ body {
 		border-color: #EAB543;
 		border-radius: 20px;
 		transform: translate(10px, 10px);
+	}
+	&__favorite{
+		&--btn{
+			background-color: transparent;
+			border: none;
+			padding: 10px;
+		}
 	}
 }

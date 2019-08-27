@@ -123,8 +123,11 @@ const showDataFavorites = favoritesData => {
     const newItem = document.createElement("li");
     let newImage = document.createElement("img");
     let newShow = document.createElement("h2");
+    let newBtn = document.createElement("button");
     newItem.appendChild(newImage);
     newItem.appendChild(newShow);
+    newItem.appendChild(newBtn);
+    newBtn.innerHTML = "<i class='fas"+" fa-times'></i>";
     favoritesList.appendChild(newItem);
     let newShowName = document.createTextNode(`${favoritesData[i].name}`);
     newShow.appendChild(newShowName);
@@ -133,6 +136,7 @@ const showDataFavorites = favoritesData => {
     newItem.classList.add("series__item--favorite", "js-item-favorite");
     newImage.classList.add("series__image--favorite");
     newShow.classList.add("series__show--favorite");
+    newBtn.classList.add("series__favorite--btn");
   }
 };
 
